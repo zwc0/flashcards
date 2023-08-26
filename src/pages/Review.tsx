@@ -1,4 +1,4 @@
-import { StateUpdater, useRef, useState } from "preact/hooks";
+import { StateUpdater, useMemo, useRef, useState } from "preact/hooks";
 import { Deck, FlashCard } from "./Home";
 import { Button } from "../components";
 
@@ -73,62 +73,60 @@ function CardItem({
     )
 }
 
-export default function Cards({
+export default function Review({
     deck,
-    setList,
-    setDeck,
     setIsReview
 }: {
     deck: Deck;
-    setList: StateUpdater<Deck[]>;
-    setDeck: StateUpdater<string>;
     setIsReview: StateUpdater<boolean>;
 }){
-    const [title, setTitle] = useState('');
-    const [answer, setAnswer] = useState('');
+    const [index, setIndex] = useState(0);
+    const [isAnswerShown, setIsAnswerShown] = useState(false);
+    const cards = useMemo(()=>[...deck.cards].sort(() => Math.random() - 0.5), []);
 
     return (
         <>
             <div class='flex gap-2 items-center'>
-                <button type="button"
-                    class='bg-blue-800 rounded-md p-1 px-2 mr-4 text-white'
-                    onClick={()=>setDeck('')}
+                <Button type="button"
+                    onClick={()=>setIsReview(false)}
                 >
-                        Back
-                </button>
+                    Back
+                </Button>
                 <span class='grow'>
                     {deck.name}
                 </span>
             </div>
             <div>
-                {deck.cards.map(x=>(
-                    <CardItem card={x} deck={deck} setList={setList} />
-                ))}
-            </div>
-            <form class='flex gap-4 pt-2' onSubmit={(e)=>{
-                e.stopPropagation();
-                e.preventDefault();
-                setList(p=>{
-                    const arr = [...p];
-                    const index = p.findIndex(x=>x === deck);
-                    arr[index] = {...deck, cards: [...deck.cards, {question: title, answer}]};
-                    return arr;
-                });
-                setTitle('');
-                setAnswer('');
-            }}>
-                <div class='grow'>
-                    <input class='w-full border border-blue-800 rounded-md text-black'
-                        value={title} onChange={({currentTarget})=>{setTitle(currentTarget.value)}} />
-                    <textarea class='w-full border border-blue-800 rounded-md text-black'
-                        value={answer} onChange={({currentTarget})=>{setAnswer(currentTarget.value)}} />
+                <div>
+                    {cards.at(index)?.question}
                 </div>
-                <button type="submit" class='bg-blue-800 rounded-md p-1 px-2 text-white'>Add Card</button>
-            </form>
+                <div onClick={()=>setIsAnswerShown(true)}>
+                    {
+                        isAnswerShown
+                        ? cards.at(index)?.answer
+                        : 'Click here to show answer'
+                    }
+                </div>
+            </div>
             <div>
-                <Button type="button" onClick={()=>setIsReview(true)}>
-                    Review
-                </Button>
+                <button type="button"
+                    class='bg-blue-800 rounded-md p-1 px-2 mr-4 text-white'
+                    onClick={()=>{
+                        setIsAnswerShown(false);
+                        setIndex(p=>p === 0 ? (cards.length-1) : (p-1));
+                    }}
+                >
+                    Back
+                </button>
+                <button type="button"
+                    class='bg-blue-800 rounded-md p-1 px-2 mr-4 text-white'
+                    onClick={()=>{
+                        setIsAnswerShown(false);
+                        setIndex(p=>(cards.length - 1) > p ? (p+1) : 0);
+                    }}
+                >
+                    Next
+                </button>
             </div>
         </>
     )

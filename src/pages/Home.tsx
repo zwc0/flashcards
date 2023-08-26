@@ -3,6 +3,7 @@ import { JSXInternal } from 'preact/src/jsx';
 import pkg from '../../package.json';
 import Decks from './Decks';
 import Cards from './Cards';
+import Review from './Review';
 
 const tryParseJson: <T>(json) => T | null = (json) => {
     try {
@@ -30,66 +31,13 @@ export default function Home() {
     const [list, setList] = useState<Deck[]>(initList());
 	const [isDark, setIsDark] = useState(tryParseJson(localStorage.getItem('flashcards.dark') || false) || false);
     const [deck, setDeck] = useState<string>('');
-    const refInputAdd = useRef<HTMLInputElement>(null);
+    const [isReview, setIsReview] = useState(false);
 
 	useEffect(()=>{
 		document.body.classList.toggle('dark', isDark);
 		localStorage.setItem('flashcards.dark', `${isDark}`);
 	}, [isDark]);
 
-    // const addItem = (e) => {
-    //     e.preventDefault();
-    //     if (!newTitle)
-    //         return;
-    //     const newList = structuredClone(list);
-    //     const newCurrList = getCurrList(indexArr, newList);
-    //     if (newCurrList.some(l=>l.title === newTitle))
-    //         return;
-    //     newCurrList.push({done: false, title: newTitle, children: []});
-    //     setList(newList);
-    //     setNewTitle('');
-    //     refInputAdd.current?.focus();
-    // }
-    // const removeItem = ({title}) => {
-    //     const doDelete = confirm(`Delete item (${title})?`);
-    //     if (!doDelete)
-    //         return;
-    //     const newList = clone(list);
-    //     const newCurrList = getCurrList(indexArr, newList);
-    //     const index = newCurrList.findIndex(x=>x.title === title);
-    //     newCurrList.splice(index, 1);
-    //     setList(newList);
-    // }
-    // const editTitle = (title: string, newTitle: string) => {
-    //     const newList = clone(list);
-    //     const newCurrList = getCurrList(indexArr, newList);
-    //     const item = newCurrList.find(l=>l.title === title);
-    //     if (!item || newCurrList.some(l=>l.title === newTitle))
-    //         return;
-    //     item.title = newTitle;
-    //     setList(newList);
-    // }
-    // const onChangeDone = ({title, done}) =>{
-    //     const newList = clone(list);
-    //     const newCurrList = getCurrList(indexArr, newList);
-    //     const item = newCurrList.find(l=>l.title === title);
-    //     if (!item)
-    //         return newCurrList;
-    //     item.done = done;
-    //     setList(newList);
-    // }
-    // const onClickTitle = ({title}) => {
-    //     setIndexArr(p => {
-    //         const newArr = clone(p);
-    //         newArr.push(title);
-    //         return newArr;
-    //     });
-    // }
-    // const back = () => {
-    //     const newArr = clone(indexArr);
-    //     newArr.pop();
-    //     setIndexArr(newArr);
-    // }
     // function exportList(){
     //     const a = document.createElement('a');
 	// 	a.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(currList)));
@@ -162,15 +110,13 @@ export default function Home() {
 					<path d="M12 22C17.5228 22 22 17.5228 22 12C22 11.5373 21.3065 11.4608 21.0672 11.8568C19.9289 13.7406 17.8615 15 15.5 15C11.9101 15 9 12.0899 9 8.5C9 6.13845 10.2594 4.07105 12.1432 2.93276C12.5392 2.69347 12.4627 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor"/>
 				</svg>
             </div>
-            {/* <div>
-                {
-                    indexArr.length > 0 && <button type="button"
-                        class='bg-blue-800 rounded-md p-1 px-2 mr-4 text-white' onClick={back}>Back</button>
-                }
-            </div> */}
             {
                 deckItem
-                ? <Cards deck={deckItem} setList={setList} setDeck={setDeck} />
+                ? (
+                    isReview
+                    ? <Review deck={deckItem} setIsReview={setIsReview} />
+                    : <Cards deck={deckItem} setList={setList} setDeck={setDeck} setIsReview={setIsReview} />
+                )
                 : <Decks list={list} setList={setList} setDeck={setDeck} />
             }
         </>
