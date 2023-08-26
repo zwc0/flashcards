@@ -2,6 +2,7 @@ import {StateUpdater, useEffect, useRef, useState} from 'preact/hooks';
 import { JSXInternal } from 'preact/src/jsx';
 import pkg from '../../package.json';
 import Decks from './Decks';
+import Cards from './Cards';
 
 const tryParseJson: <T>(json) => T | null = (json) => {
     try {
@@ -140,6 +141,8 @@ export default function Home() {
 
     localStorage.setItem('flashcards.decks', JSON.stringify(list));
 
+    const deckItem = list.find(x=>x.name === deck);
+
     return (
         <>
             <div class='flex flex-wrap items-center mb-2'>
@@ -164,21 +167,12 @@ export default function Home() {
                     indexArr.length > 0 && <button type="button"
                         class='bg-blue-800 rounded-md p-1 px-2 mr-4 text-white' onClick={back}>Back</button>
                 }
-                {indexArr.join(' - ')}
-            </div>
-            <div ref={dragRef} className="grid divide-blue-800 divide-y gap-1">
-                {currList.map((li)=>(
-                    <ListItem className="pt-1" key={li.title} done={li.done} title={li.title} children={li.children}
-                        onClickTitle={onClickTitle} onChangeDone={onChangeDone}
-                        removeItem={removeItem} editTitle={editTitle} />
-                ))}
-            </div>
-            <form className='flex gap-4 pt-2' onSubmit={addItem}>
-                <input ref={refInputAdd} class='grow border border-blue-800 rounded-md text-black'
-                    value={newTitle} onChange={({currentTarget})=>{setNewTitle(currentTarget.value)}} />
-                <button type="submit" class='bg-blue-800 rounded-md p-1 px-2 text-white'>Add Item</button>
-            </form> */}
-            <Decks list={list} setList={setList} setDeck={setDeck} />
+            </div> */}
+            {
+                deckItem
+                ? <Cards deck={deckItem} setList={setList} setDeck={setDeck} />
+                : <Decks list={list} setList={setList} setDeck={setDeck} />
+            }
         </>
     );
 }
