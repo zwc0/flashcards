@@ -148,18 +148,19 @@ __webpack_require__.r(__webpack_exports__);
 function CardItem({ deck, card, setList }) {
     const [isEdit, setIsEdit] = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
     const [newTitle, setNewTitle] = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_1__.useState)(card.question);
-    const [newAnswer, setAnswer] = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_1__.useState)(card.answer);
+    const [newAnswer, setNewAnswer] = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_1__.useState)(card.answer);
     const saveNewTitle = (e) => {
-        // e.stopPropagation();
-        // e.preventDefault();
-        // setList(p=>{
-        //     const arr = structuredClone(p);
-        //     const item = arr.find(x=>x.name === deck.name);
-        //     if (item)
-        //         item.name = newTitle;
-        //     return arr;
-        // });
-        // setIsEdit(false);
+        e.stopPropagation();
+        e.preventDefault();
+        setList(p => {
+            const arr = [...p];
+            const index = arr.findIndex(x => x === deck);
+            const cardIndex = deck.cards.findIndex(x => x === card);
+            arr[index] = { ...deck, cards: deck.cards };
+            arr[index].cards[cardIndex] = { question: newTitle, answer: newAnswer };
+            return arr;
+        });
+        setIsEdit(false);
     };
     const remove = (e) => {
         e.stopPropagation();
@@ -172,7 +173,7 @@ function CardItem({ deck, card, setList }) {
         });
     };
     return ((0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("form", { class: 'flex gap-2 items-center', onSubmit: saveNewTitle, children: [isEdit
-                ? (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { class: 'grow border border-blue-800 rounded-md text-black', value: newTitle, onInput: ({ currentTarget }) => setNewTitle(currentTarget.value) })
+                ? (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { class: 'grow', children: [(0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { class: 'w-full border border-blue-800 rounded-md text-black', value: newTitle, onChange: ({ currentTarget }) => { setNewTitle(currentTarget.value); } }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("textarea", { class: 'w-full border border-blue-800 rounded-md text-black', value: newAnswer, onChange: ({ currentTarget }) => { setNewAnswer(currentTarget.value); } })] })
                 : (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { class: 'grow', children: [(0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { children: card.question }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { children: card.answer })] }), (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { class: "min-w-fit", children: [isEdit
                         ? (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { type: "submit", class: 'bg-blue-800 rounded-md p-1 px-2 mr-4 text-white', children: "Save" })
                         : (0,preact_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { type: "button", class: 'bg-blue-800 rounded-md p-1 px-2 mr-4 text-white', onClick: (e) => {

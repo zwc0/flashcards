@@ -12,18 +12,19 @@ function CardItem({
 }) {
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [newTitle, setNewTitle] = useState<string>(card.question);
-    const [newAnswer, setAnswer] = useState<string>(card.answer);
+    const [newAnswer, setNewAnswer] = useState<string>(card.answer);
     const saveNewTitle = (e) => {
-        // e.stopPropagation();
-        // e.preventDefault();
-        // setList(p=>{
-        //     const arr = structuredClone(p);
-        //     const item = arr.find(x=>x.name === deck.name);
-        //     if (item)
-        //         item.name = newTitle;
-        //     return arr;
-        // });
-        // setIsEdit(false);
+        e.stopPropagation();
+        e.preventDefault();
+        setList(p=>{
+            const arr = [...p];
+            const index = arr.findIndex(x=>x === deck);
+            const cardIndex = deck.cards.findIndex(x=>x===card);
+            arr[index] = {...deck, cards: deck.cards};
+            arr[index].cards[cardIndex] = {question: newTitle, answer: newAnswer};
+            return arr;
+        });
+        setIsEdit(false);
     }
     const remove = (e) => {
         e.stopPropagation();
@@ -39,9 +40,12 @@ function CardItem({
     return (
         <form class={'flex gap-2 items-center'} onSubmit={saveNewTitle}>
             {isEdit
-                ? <input class='grow border border-blue-800 rounded-md text-black'
-                    value={newTitle}
-                    onInput={({currentTarget})=>setNewTitle(currentTarget.value)} />
+                ? <div class='grow'>
+                    <input class='w-full border border-blue-800 rounded-md text-black'
+                        value={newTitle} onChange={({currentTarget})=>{setNewTitle(currentTarget.value)}} />
+                    <textarea class='w-full border border-blue-800 rounded-md text-black'
+                        value={newAnswer} onChange={({currentTarget})=>{setNewAnswer(currentTarget.value)}} />
+                </div>
                 : <div class='grow'>
                     <div>{card.question}</div>
                     <div>{card.answer}</div>                    
