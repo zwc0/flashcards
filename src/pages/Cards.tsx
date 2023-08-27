@@ -100,7 +100,7 @@ export default function Cards({
                     {deck.name}
                 </span>
             </div>
-            <div>
+            <div class='grow flex flex-col gap-2 min-h-0 py-2 overflow-auto'>
                 {deck.cards.map(x=>(
                     <CardItem card={x} deck={deck} setList={setList} />
                 ))}

@@ -74,7 +74,7 @@ export default function Decks({
 
     return (
         <>
-            <div>
+            <div class='grow flex flex-col gap-4 min-h-0 overflow-auto'>
                 {list.map(d=>(
                     <DeckItem deck={d} setDeck={setDeck} setList={setList} />
                 ))}
