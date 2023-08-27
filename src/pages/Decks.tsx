@@ -31,7 +31,7 @@ function DeckItem({
     }
 
     return (
-        <form class={'flex gap-2 items-center'} onSubmit={saveNewTitle}>
+        <form class={'flex gap-2 items-center pt-2'} onSubmit={saveNewTitle}>
             {isEdit
                 ? <input class='grow border border-blue-800 rounded-md text-black'
                     value={newTitle}
@@ -74,7 +74,7 @@ export default function Decks({
 
     return (
         <>
-            <div class='grow flex flex-col gap-4 min-h-0 overflow-auto'>
+            <div class='grow flex flex-col gap-2 min-h-0 overflow-auto divide-y divide-y-black dark:divide-y-white'>
                 {list.map(d=>(
                     <DeckItem deck={d} setDeck={setDeck} setList={setList} />
                 ))}

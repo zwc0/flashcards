@@ -39,7 +39,7 @@ function CardItem({
     }
 
     return (
-        <form class={'flex gap-2 items-center'} onSubmit={saveNewTitle}>
+        <form class={'flex gap-2 items-center pt-2'} onSubmit={saveNewTitle}>
             {isEdit
                 ? <div class='grow'>
                     <input class='w-full border border-blue-800 rounded-md text-black'
@@ -100,7 +100,7 @@ export default function Cards({
                     {deck.name}
                 </span>
             </div>
-            <div class='grow flex flex-col gap-2 min-h-0 py-2 overflow-auto'>
+            <div class='grow flex flex-col gap-2 min-h-0 py-2 overflow-auto divide-y divide-y-black dark:divide-y-white'>
                 {deck.cards.map(x=>(
                     <CardItem card={x} deck={deck} setList={setList} />
                 ))}

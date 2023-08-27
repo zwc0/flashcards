@@ -96,11 +96,11 @@ export default function Review({
                     {deck.name}
                 </span>
             </div>
-            <div class='grow flex flex-col gap-4 min-h-0 py-2 text-center overflow-auto'>
+            <div class='grow flex flex-col gap-4 min-h-0 py-2 text-center overflow-auto divide-y divide-y-black dark:divide-y-white'>
                 <div class=''>
                     {cards.at(index)?.question}
                 </div>
-                <div class='grow' onClick={()=>setIsAnswerShown(true)}>
+                <div class='grow pt-4' onClick={()=>setIsAnswerShown(true)}>
                     {
                         isAnswerShown
                         ? cards.at(index)?.answer
